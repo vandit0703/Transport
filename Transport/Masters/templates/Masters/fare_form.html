@@ -1,0 +1,340 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% if fare %}Edit Fare{% else %}Create Fare{% endif %}</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 50px 0;
+            min-height: 100vh;
+            background: #e4e9f7;
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 1100px;
+            padding: 30px;
+            background: #11101d;
+            border-radius: 12px;
+            color: #fff;
+        }
+
+        .form-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #03a9f4;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            width: 100%;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .input-box input,
+        .input-box select,
+        .input-box textarea {
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #000;
+            outline: none;
+        }
+
+        .form-box input[type="submit"] {
+            width: 100%;
+            background: #03a9f4;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        .form-box input[type="submit"]:hover {
+            background: #0288d1;
+        }
+
+        .btn-back {
+            background-color: #03a9f4;
+            color: #fff;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .btn-back:hover {
+            background-color: #0288d1;
+        }
+
+        /* Range table styles - matches your theme */
+        .range-table-wrap {
+            background: #0f0e14;
+            /* slightly darker than form background for contrast */
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(3, 169, 244, 0.12);
+        }
+
+        .range-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .range-table thead th {
+            background: #03a9f4;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .range-table thead th:last-child {
+            border-right: none;
+        }
+
+        .range-table tbody td {
+            padding: 10px;
+            text-align: center;
+            border-top: 1px solid rgba(3, 169, 244, 0.08);
+        }
+
+        .range-input {
+            width: 100%;
+            max-width: 140px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* responsive: allow table to scroll on small widths */
+        .range-scroll {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-box">
+        <a href="{% url 'fare_list' %}" class="btn-back">← Back to List</a>
+        <h2>{% if fare %}Edit Fare{% else %}Create Fare{% endif %}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Row 1 -->
+            <div class="form-row">
+                <div class="input-box">
+                    <input type="date" name="Effective_Date" required
+                        value="{{ fare.effective_date|default_if_none:'' }}">
+                    <label>Effective Date</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="Owner_Code" maxlength="5" required
+                        value="{{ fare.owner_code|default_if_none:'' }}">
+                    <label>Owner Code</label>
+                </div>
+                <div class="input-box">
+                    <select name="Fare_From" required>
+                        <option value="" disabled>Select From City</option>
+                        {% for city in cities %}
+                        <option value="{{ city.id_number }}">{{ city.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Fare From</label>
+                </div>
+                <div class="input-box">
+                    <select name="Fare_To" required>
+                        <option value="" disabled>Select To City</option>
+                        {% for city in cities %}
+                        <option value="{{ city.id_number }}">{{ city.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Fare To</label>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="form-row">
+                <div class="input-box">
+                    <input type="number" step="0.01" name="Fare_Rate" required
+                        value="{{ fare.fare_rate|default_if_none:'' }}">
+                    <label>Fare Rate</label>
+                </div>
+                <div class="input-box">
+                    <select name="Fare_Company" required>
+                        <option value="" disabled>Select Company</option>
+                        {% for company in companies %}
+                        <option value="{{ company.IdNumber }}">{{ company.CompanyName }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <label>Fare Company</label>
+                </div>
+                <div class="input-box">
+                    <select name="Fare_Product" required>
+                        <option value="" disabled>Select Product</option>
+                        {% for product in products %}
+                        <option value="{{ product.IDNumber }}">{{ product.Owner_Name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <label>Fare Product</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="If_Nett" maxlength="1" required
+                        value="{{ fare.if_nett|default_if_none:'' }}">
+                    <label>If Nett (Y/N)</label>
+                </div>
+            </div>
+
+            <!-- RANGE FARES TABLE (replaces earlier Range rows) -->
+            <div class="range-table-wrap">
+                <label style="display:block; margin-bottom:10px; color:#fff; font-size:14px;">Range Fares &
+                    Discounts</label>
+                <div class="range-scroll">
+                    <table class="range-table">
+                        <thead>
+                            <tr>
+                                <th>Range</th>
+                                <th>Range 1</th>
+                                <th>Range 2</th>
+                                <th>Range 3</th>
+                                <th>Range 4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight:600; color:#03a9f4;">Fare</td>
+                                <td>
+                                    <input class="range-input" type="number" step="0.01" name="Range1_Fare"
+                                        value="{{ fare.range1_fare|default_if_none:'' }}">
+                                </td>
+                                <td>
+                                    <input class="range-input" type="number" step="0.01" name="Range2_Fare"
+                                        value="{{ fare.range2_fare|default_if_none:'' }}">
+                                </td>
+                                <td>
+                                    <input class="range-input" type="number" step="0.01" name="Range3_Fare"
+                                        value="{{ fare.range3_fare|default_if_none:'' }}">
+                                </td>
+                                <td>
+                                    <input class="range-input" type="number" step="0.01" name="Range4_Fare"
+                                        value="{{ fare.range4_fare|default_if_none:'' }}">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="font-weight:600; color:#03a9f4;">Discount</td>
+                                <td>
+                                    <input class="range-input" type="number" step="0.01" name="Range1_Discount_Fare"
+                                        value="{{ fare.range1_discount_fare|default_if_none:'' }}">
+                                </td>
+                                <td>
+                                    <input class="range-input" type="number" step="0.01" name="Range2_Discount_Fare"
+                                        value="{{ fare.range2_discount_fare|default_if_none:'' }}">
+                                </td>
+                                <td>
+                                    <input class="range-input" type="number" step="0.01" name="Range3_Discount_Fare"
+                                        value="{{ fare.range3_discount_fare|default_if_none:'' }}">
+                                </td>
+                                <td>
+                                    <input class="range-input" type="number" step="0.01" name="Range4_Discount_Fare"
+                                        value="{{ fare.range4_discount_fare|default_if_none:'' }}">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Remaining fields -->
+            <div class="form-row">
+                <div class="input-box">
+                    <input type="text" name="Fare_Type" maxlength="1" required
+                        value="{{ fare.fare_type|default_if_none:'' }}">
+                    <label>Fare Type<br>(C = Contractor, O = Owner)</label>
+                </div>
+                <div class="input-box">
+                    <input type="number" name="RTD_Kms" required value="{{ fare.rtd_kms|default_if_none:'' }}">
+                    <label>RTD Kms</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="Product_Type" maxlength="1" required
+                        value="{{ fare.product_type|default_if_none:'' }}">
+                    <label>Product Type</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="If_Hire" maxlength="1" required
+                        value="{{ fare.if_hire|default_if_none:'' }}">
+                    <label>If Hire (Y/N)</label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-box">
+                    <input type="number" step="0.01" name="Discount_Fare"
+                        value="{{ fare.discount_fare|default_if_none:'' }}">
+                    <label>Discount Fare</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="Shortage_Full_Deduction" maxlength="1" required
+                        value="{{ fare.shortage_full_deduction|default_if_none:'' }}">
+                    <label>Shortage Full Deduction (Y/N)</label>
+                </div>
+                <!-- <div class="input-box">
+                    <input type="text" name="Updated_By" maxlength="10" required
+                        value="{{ fare.updated_by|default_if_none:'' }}">
+                    <label>Updated By</label>
+                </div> -->
+                <!-- empty box to keep grid layout even -->
+                <div class="input-box" style="visibility:hidden;"></div>
+            </div>
+
+            <input type="submit" value="Save Fare">
+        </form>
+    </div>
+</body>
+
+</html>

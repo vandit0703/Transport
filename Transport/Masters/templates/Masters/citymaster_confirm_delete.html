@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete City</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #e4e9f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .confirm-box {
+            background: #11101d;
+            color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            width: 400px;
+        }
+        .confirm-box a, .confirm-box button {
+            padding: 10px 20px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-cancel {
+            background: #03a9f4;
+            color: #fff;
+        }
+        .btn-cancel:hover {
+            background: #0288d1;
+        }
+        .btn-delete {
+            background: #f44336;
+            color: #fff;
+        }
+        .btn-delete:hover {
+            background: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirm-box">
+        <h2>Are you sure you want to delete "{{ city.name }}"?</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn-delete">Yes, Delete</button>
+            <a href="{% url 'citymaster_list' %}" class="btn-cancel">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

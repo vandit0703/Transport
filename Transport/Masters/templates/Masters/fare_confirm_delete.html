@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Fare</title>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #e4e9f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .delete-box {
+            background: #11101d;
+            padding: 30px;
+            border-radius: 12px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .delete-box button,
+        .delete-box a {
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: #fff;
+        }
+
+        .btn-back {
+            background: #03a9f4;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .btn-delete:hover {
+            background: #d32f2f;
+        }
+
+        .btn-back:hover {
+            background: #0288d1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="delete-box">
+        <h3>Are you sure you want to delete this Fare?</h3>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-delete">Delete</button>
+            <a href="{% url 'fare_list' %}" class="btn-back">Cancel</a>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fare List</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #e4e9f7;
+            padding: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: #11101d;
+            border-radius: 12px;
+            padding: 20px;
+            color: #fff;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #03a9f4;
+        }
+
+        .btn-add {
+            background-color: #03a9f4;
+            color: #fff;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .btn-add:hover {
+            background-color: #0288d1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #444;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        table th {
+            background: #03a9f4;
+            color: #fff;
+        }
+
+        table tr:nth-child(even) {
+            background: #1c1a2b;
+        }
+
+        table tr:nth-child(odd) {
+            background: #222034;
+        }
+
+        .action-btn {
+            padding: 4px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .edit-btn {
+            background: #4caf50;
+        }
+
+        .edit-btn:hover {
+            background: #388e3c;
+        }
+
+        .delete-btn {
+            background: #f44336;
+        }
+
+        .delete-btn:hover {
+            background: #d32f2f;
+        }
+
+        @media(max-width: 900px) {
+
+            table th,
+            table td {
+                font-size: 12px;
+                padding: 6px;
+            }
+        }
+
+        @media(max-width: 600px) {
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #03a9f4;
+            border-radius: 4px;
+            width: 250px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-container button {
+            padding: 8px 16px;
+            background-color: #03a9f4;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin-left: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #0288d1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Fare List</h2>
+        <div class="search-container">
+            <form method="get">
+                <input type="text" name="q" class="search-input" placeholder="Search..." value="{{ request.GET.q }}">
+                <button type="submit" class="search-btn">Search</button>
+                {% if request.GET.q %}
+                <a href="{% url 'product_list' %}" class="search-btn" style="text-decoration:none;">Clear</a>
+                {% endif %}
+            </form>
+        </div>
+        <a href="{% url 'fare_create' %}" class="btn-add">+ Add New Fare</a>
+
+        {% if fares %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Effective Date</th>
+                    <th>Owner Code</th>
+                    <th>Fare From</th>
+                    <th>Fare To</th>
+                    <th>Fare Rate</th>
+                    <th>Fare Company</th>
+                    <th>Fare Product</th>
+                    <!-- <th>If Nett</th>
+                    <th>Fare Type</th>
+                    <th>RTD Kms</th>
+                    <th>Product Type</th>
+                    <th>Range1 Fare</th>
+                    <th>Range2 Fare</th>
+                    <th>Range3 Fare</th>
+                    <th>Range4 Fare</th>
+                    <th>Range1 Discount</th>
+                    <th>Range2 Discount</th>
+                    <th>Range3 Discount</th>
+                    <th>Range4 Discount</th>
+                    <th>If Hire</th>
+                    <th>Discount Fare</th>
+                    <th>Shortage Deduction</th> -->
+                    <!-- <th>Updated By</th> -->
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fare in fares %}
+                <tr>
+                    <td>{{ fare.effective_date }}</td>
+                    <td>{{ fare.owner_code }}</td>
+                    <td>{{ fare.fare_from.name }}</td>
+                    <td>{{ fare.fare_to.name }}</td>
+                    <td>{{ fare.fare_rate }}</td>
+                    <td>{{ fare.fare_company.CompanyName }}</td>
+                    <td>{{ fare.fare_product.Owner_Name }}</td>
+                    <!-- <td>{{ fare.if_nett }}</td>
+                    <td>{{ fare.fare_type }}</td>
+                    <td>{{ fare.rtd_kms }}</td>
+                    <td>{{ fare.product_type }}</td>
+                    <td>{{ fare.range1_fare }}</td>
+                    <td>{{ fare.range2_fare }}</td>
+                    <td>{{ fare.range3_fare }}</td>
+                    <td>{{ fare.range4_fare }}</td>
+                    <td>{{ fare.range1_discount_fare }}</td>
+                    <td>{{ fare.range2_discount_fare }}</td>
+                    <td>{{ fare.range3_discount_fare }}</td>
+                    <td>{{ fare.range4_discount_fare }}</td>
+                    <td>{{ fare.if_hire }}</td>
+                    <td>{{ fare.discount_fare }}</td>
+                    <td>{{ fare.shortage_full_deduction }}</td> -->
+                    <!-- <td>{{ fare.updated_by }}</td> -->
+                    <td>
+                        <a href="{% url 'fare_edit' fare.id %}" class="action-btn edit-btn">Edit</a>
+                        <a href="{% url 'fare_delete' fare.id %}" class="action-btn delete-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align:center; color:#fff;">No fares found.</p>
+        {% endif %}
+    </div>
+</body>
+
+</html>

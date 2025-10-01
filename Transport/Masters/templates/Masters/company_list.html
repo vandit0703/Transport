@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Company List</title>
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #e4e9f7;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #11101d;
+            color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background: #03a9f4;
+            cursor: pointer;
+        }
+
+        tr:hover {
+            background: #222;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.3s;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background-color: #03a9f4;
+        }
+
+        .edit-btn:hover {
+            background-color: #0288d1;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .btn-back {
+            background-color: #03a9f4;
+            color: #fff;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #0288d1;
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #03a9f4;
+            border-radius: 4px;
+            width: 250px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-container button {
+            padding: 8px 16px;
+            background-color: #03a9f4;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin-left: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #0288d1;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 style="text-align: center; margin-bottom: 20px;">Company List</h2>
+    <div class="search-container">
+        <form method="get">
+            <input type="text" name="q" class="search-input" placeholder="Search..." value="{{ request.GET.q }}">
+            <button type="submit" class="search-btn">Search</button>
+            {% if request.GET.q %}
+            <a href="{% url 'product_list' %}" class="search-btn" style="text-decoration:none;">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+    <div style="position: absolute; top: 20px; right: 20px;">
+        <a href="{% url 'home' %}" class="btn-back">Back</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id Number</th>
+                <th>Company Name</th>
+                <th>City</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in companies %}
+            <tr>
+                <td>{{ company.IdNumber }}</td>
+                <td>{{ company.CompanyName }}</td>
+                <td>{{ company.City }}</td>
+                <td>
+                    <a href="{% url 'edit_company' company.IdNumber %}" class="btn edit-btn">Edit</a>
+                    <a href="{% url 'delete_company' company.IdNumber %}" class="btn delete-btn">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No companies available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>

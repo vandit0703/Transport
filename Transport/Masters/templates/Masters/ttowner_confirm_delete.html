@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Delete TT Owner</title>
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body {
+            background: #e4e9f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .confirm-box {
+            background: #11101d;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            color: #fff;
+            width: 400px;
+        }
+        .confirm-box h2 {
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            color: #fff;
+            transition: 0.3s;
+        }
+        .btn.cancel-btn {
+            background-color: #757575;
+        }
+        .btn.cancel-btn:hover {
+            background-color: #616161;
+        }
+        .btn.delete-btn {
+            background-color: #f44336;
+        }
+        .btn.delete-btn:hover {
+            background-color: #d32f2f;
+        }
+         .btn-back {
+        background-color: #03a9f4;
+        color: #fff;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+    .btn-back:hover {
+        background-color: #0288d1;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="confirm-box">
+        <h2>Are you sure you want to delete "{{ owner.OwnerName }}"?</h2>
+        
+        <form method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn delete-btn">Yes, Delete</button>
+        </form>
+        
+        <a href="{% url 'ttowner_list' %}" class="btn cancel-btn">Cancel</a>
+    </div>
+</body>
+
+</html>
